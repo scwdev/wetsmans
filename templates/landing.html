@@ -1,0 +1,10 @@
+{% extends "index.html" %}
+
+{% block title %}Drs Wetsman - Home{% endblock %}
+
+{% block content %}
+
+<a href="{{ url_for('menu', dr_name='Howard') }}">Howard</a>
+<a href="{{ url_for('menu', dr_name='Not Howard') }}">Not Howard</a>
+
+{% endblock content %}

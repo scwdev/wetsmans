@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='reset.css') }}">
+    <title>{% block title %}{% endblock title%}</title>
+    {% endblock head%}
+</head>
+<body>
+    <nav id="nav">
+        {% block nav %}{% endblock nav %}
+    </nav>
+    <main id="content">
+        {% block content %}{% endblock content%}
+    </main>
+    <footer id="copyright">
+        &copy; Copyright 2021 by <a href="www.noamblanks.com">Noam Blanks</a>.
+    </footer>
+</body>
+</html>

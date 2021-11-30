@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+
+{% block title %}Dr {{ dr.name }} - Menu{% endblock %}
+
+{% block content %}
+
+<img src="{{ dr.img }}" alt="Picture of Dr. {{ dr.name }}">
+
+<ul>
+    {% for link in dr.links %}
+    <li><a href="{{ link.href }}">{{link.text}}</a></li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}

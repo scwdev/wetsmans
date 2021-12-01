@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Update {{ current_user.name }}{% endblock %}
+
+{% block content %}
+
+<h1>Update</h1>
+
+<form action="/update" method="POST">
+    <!-- <input type="email" id="email-input" name="email" default="email@domain.com"><br/> -->
+    <!-- <input type="password" id="password-input" name="password" default="password"><br/> -->
+    <!-- <input type="checkbox" name="" id=""> -->
+    <label for="name">
+        Name: 
+        <input name="name" type="text" id="name-input" value="{{  current_user.name  }}">
+    </label>
+    <label for="img">
+        Image URL: 
+        <input type="url" name="img" id="img-input" value="{{ current_user.img }}">
+    </label>
+    <!-- <input type="password" name="password-1" id="password-1-input">
+    <input type="password" name="password-2" id="password-2-input"> -->
+    <!-- <input name="bio" type="text" id="bio-input" value={{ current_user.bio }}> -->
+    <input type="submit">
+</form>
+
+{% endblock content %}

@@ -21,7 +21,7 @@ def load_user(user_id):
 @user_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == "GET":
-        return render_template('login.html')
+        return render_template('users/login.html')
     else:
         login_data = request.form
         user = User.query.filter_by(email = login_data['email']).first()
@@ -41,7 +41,7 @@ def login():
             flash('Login successful')
             return redirect(url_for('landing'))
         else:
-            return render_template('login.html', error=login_error)
+            return render_template('users/login.html', error=login_error)
 
 
 
@@ -49,14 +49,13 @@ def login():
 @login_required
 def update():
     if request.method == 'GET':
-        return render_template('update_user.html')
+        return render_template('users/update.html')
     else:
         user = User.query.get(current_user.id)
         update_data = request.form
         request_error = None
         
         user.name = update_data['name']
-        user.bio = update_data['bio']
         user.img = update_data['img']
         
         db.session.commit()
@@ -70,7 +69,7 @@ def update():
 @user_bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == "GET":
-        return render_template('register.html')
+        return render_template('users/register.html')
     else:
         register_data = request.form
         
@@ -100,7 +99,7 @@ def register():
             return redirect(url_for('landing'))
         
         else:
-            return render_template('register.html', error=register_error)
+            return render_template('users/register.html', error=register_error)
 
 
 @user_bp.route('/logout')

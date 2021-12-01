@@ -1,4 +1,4 @@
-{% extends "index.html" %}
+{% extends "base.html" %}
 
 {% block title %}Dr {{ dr.name }} - Menu{% endblock %}
 
@@ -7,7 +7,7 @@
 <img src="{{ dr.img }}" alt="Picture of Dr. {{ dr.name }}">
 
 <ul>
-    {% for link in dr.links %}
+    {% for link in links %}
     <li><a href="{{ link.href }}">{{link.text}}</a></li>
     {% endfor %}
 </ul>

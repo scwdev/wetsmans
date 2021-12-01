@@ -10,6 +10,9 @@
     {% endblock head%}
 </head>
 <body>
+    {% if current_user.is_authenticated %}
+    <p>{{ current_user.email }} is logged in</p>
+    {% endif %}
     <nav id="nav">
         {% block nav %}{% endblock nav %}
     </nav>

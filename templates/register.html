@@ -1,0 +1,18 @@
+{% extends "index.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+<h1>Register</h1>
+
+<form action="/register" method="POST">
+    <input type="email" id="email-input" name="email" default="email@domain.com"><br/>
+    <input type="password" id="password-input" name="password" default="password"><br/>
+    <input type="checkbox" name="" id="">
+    <label for="key">Admin</label>
+    <input type="password" name="key" id="admin-input">
+    <input type="submit">
+</form>
+
+{% endblock content %}

@@ -1,16 +1,26 @@
 from flask import Flask, jsonify, request, json, Blueprint, render_template
-from dotenv import load_dotenv 
+import feedparser
 
+from dotenv import load_dotenv 
 
 from models.Video import Video
 
-video_bp = Blueprint('video', __name__, url_prefix='/<dr_name>/videos')
+video_bp = Blueprint('videos', __name__, url_prefix='/videos')
 
 load_dotenv()
 
 @video_bp.route('/', methods=['GET'])
-def index_videos(dr_name):
-    return render_template('videos/index.html', dr_name=dr_name)
+def index(dr_name:str):
+    video_feed = []
+    # if dr_name == 'Howard':
+    video_feed = feedparser.parse('https://www.youtube.com/feeds/videos.xml?channel_id=UCT0_JeyTysWfMp25xcJthMg')
+        
+    return render_template('videos/index.html', feed=video_feed)
+    
+    
+    
+    
+    
     
 @video_bp.route('/<id>', methods=['GET', 'POST', 'DELETE'])
 def show_video():

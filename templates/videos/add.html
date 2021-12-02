@@ -1,0 +1,36 @@
+{% extends videos/index.html %}
+
+{% block add_video %}
+
+<script>
+    const addFrom = () => {
+        form = document.getElementById('add-video-form')
+        form.classList.remove('hidden')
+    }
+</script>
+
+<button onclick=addForm() id="add-video-btn">Add Video</button>
+<form action="" class="hidden" id="add-video-form">
+    <label for="title">
+        Title
+        <input name="title" type="text">\
+    </label>
+    <label for="description">
+        Description
+        <input name="description" type="text">\
+    </label>
+    <label for="link">
+        YouTube Embed Link
+        <input name="link" type="text">\
+    </label>
+    <input type="submit" value="Submit">
+</form>
+
+
+{% endblock add_video %}
+
+{% block edit_video %}
+
+<button>Edit Video</button>
+
+{% endblock edit_video %}

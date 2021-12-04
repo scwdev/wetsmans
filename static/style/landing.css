@@ -1,0 +1,39 @@
+
+#landing {
+    margin-top: 50vh;
+    transform: translateY(-50%);
+    justify-content: center;
+    align-items: center;
+}
+
+#landing a {
+    width: 35vw;
+    max-width: 50vh;
+    margin: 5vw;
+    align-items: center;
+    font-size: 2em;
+    text-align: center;
+}
+
+#landing a span {
+    padding: .5em;
+}
+
+#landing a img.headshot {
+    /* width: 35vw; */
+    border-radius: 100%;
+    background-color: aqua;
+    
+
+}
+
+@media (max-aspect-ratio: 1/1) {
+    #landing {
+        flex-direction: column;
+    }
+
+    #landing a {
+        width: 30vh;
+        margin: 3vh;
+    }
+}

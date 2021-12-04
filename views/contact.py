@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, json, Blueprint, render_template
+from flask import Blueprint, render_template
 from dotenv import load_dotenv
 
 contact_bp = Blueprint('contact', __name__)

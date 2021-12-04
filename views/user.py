@@ -1,10 +1,8 @@
 import os
-from flask import request, json, Blueprint, flash, render_template, redirect, url_for
+from flask import request, Blueprint, flash, render_template, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from dotenv import load_dotenv
-
-from pprint import pprint
 
 from app import db, login_manager
 from models.User import User
@@ -44,7 +42,6 @@ def login():
             return render_template('users/login.html', error=login_error)
 
 
-
 @user_bp.route('/update', methods=['GET', 'POST'])
 @login_required
 def update():
@@ -62,9 +59,6 @@ def update():
         
         return redirect(url_for('landing'))
         
-
-
-
 
 @user_bp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -107,29 +101,3 @@ def register():
 def logout():
     logout_user()
     return redirect('landing')
-
-
-
-
-
-#########################
-
-@user_bp.route('/users', methods=['GET'])
-def index_users():
-    return f"{User.query.all()}"
-
-
-
-
-@user_bp.route('/users', methods=['POST'])
-def create_user():
-    data = json.loads(request.data)
-    new_user = {
-        'email': data['email'],
-        'password': data['password']
-    }
-
-    db.session.add(User(new_user))
-    db.session.commit()
-    
-    return (User.query.filter_by(email=data['email']))

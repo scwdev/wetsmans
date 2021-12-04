@@ -1,5 +1,3 @@
-print(2)
-
 from app import db
 from datetime import datetime
 from sqlalchemy.ext.declarative import declared_attr

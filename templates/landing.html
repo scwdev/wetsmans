@@ -3,8 +3,15 @@
 {% block title %}Drs Wetsman - Home{% endblock %}
 
 {% block content %}
-
-<a href="{{ url_for('doctor.menu', dr_name='Howard') }}">Howard</a>
-<a href="{{ url_for('doctor.menu', dr_name='Not Howard') }}">Not Howard</a>
+<div class="flex" id="landing">
+    <a class="flex f-column" href="{{ url_for('doctor.menu', dr_name='Howard') }}">
+        <img class="headshot" src="https://placekitten.com/500/500" alt="B&W headshot of Dr Howard Wetsman">
+        <span>Howard</span>
+    </a>
+    <a class="flex f-column" href="{{ url_for('doctor.menu', dr_name='Not Howard') }}">
+        <img class="headshot" src="https://placekitten.com/1000/1000" alt="Headshot">
+        <span>Not Howard</span>
+    </div>
+</a>
 
 {% endblock content %}

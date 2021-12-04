@@ -1,0 +1,43 @@
+.hidden {
+    display: none;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+.modal {
+    position: absolute;
+    width: 80vw;
+    height: 45vw;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+img {
+    border-radius: 5%;
+    max-width: 100%;
+}
+
+.center {
+    text-align: center;
+    margin: 0 auto;
+}
+
+
+.flex {
+    display: flex;
+}
+
+.f-column {
+    flex-direction: column;
+}
+
+footer {
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+}

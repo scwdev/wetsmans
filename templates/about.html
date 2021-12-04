@@ -1,3 +1,22 @@
 {% extends 'base.html' %}
 
 {% include 'nav.html' %}
+
+{% block title %}
+About {{g.dr_name}}
+{% endblock title %}
+
+{% block content %}
+
+<h1>Dr. {{g.dr_name}} Wetsman</h1>
+
+<article>
+<img src="{{g.dr.img}}" alt="headshot of Dr {{g.dr.name}}">
+{% for paragraph in bio  %}
+
+    <p>{{paragraph}}</p>
+
+{% endfor %}
+</article>
+
+{% endblock content %}

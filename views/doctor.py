@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, json, Blueprint, render_template, g, url_for
+from flask import Blueprint, g, render_template, url_for, redirect
 from dotenv import load_dotenv
 
 from models.User import User
@@ -10,39 +10,38 @@ load_dotenv()
 
 @doctor_bp.url_value_preprocessor
 def nav_links(endpoints, values):
-    dr_name = values['dr_name']
+    g.dr = User.query.filter_by(email="howard@tocdr.com").first()
+    g.dr_name = values['dr_name']
     g.nav_links=[
         {
             'href': url_for('landing'),
             'text': 'Landing'
         },
         {
-            'href': url_for('doctor.about.about', dr_name=dr_name),
+            'href': url_for('doctor.about.about', dr_name=g.dr_name),
             'text': 'About Me'
         },
         {
-            'href': url_for('doctor.videos.index', dr_name=dr_name),
+            'href': url_for('doctor.videos.index', dr_name=g.dr_name),
             'text': 'Videos'
         },
         {
-            'href': url_for('doctor.articles.index', dr_name=dr_name),
+            'href': url_for('doctor.articles.index', dr_name=g.dr_name),
             'text': 'Articles'
         },
         {
-            'href': url_for('doctor.addiction_tool.form', dr_name=dr_name),
+            'href': url_for('doctor.addiction_tool.form', dr_name=g.dr_name),
             'text': 'Addiction Tool'
         },
         {
-            'href': url_for('doctor.contact.form', dr_name=dr_name),
+            'href': url_for('doctor.contact.form', dr_name=g.dr_name),
             'text': 'Contact'
         }
         ]
 
 @doctor_bp.route("/")
 def menu(dr_name:str):
-    links = []
     if dr_name == "Howard":
-        dr = User.query.filter_by(email="howard@tocdr.com").first()
-        links = g.nav_links
+        return render_template("menu.html", links=g.nav_links, dr=g.dr)
     
-    return render_template("menu.html", links=links, dr=dr)
+    return redirect(url_for('landing'))

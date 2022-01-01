@@ -6,9 +6,9 @@
 
 <div id="menu-div" class="flex">
     <img src="{{ dr.img }}" alt="Picture of Dr. {{ dr.name }}">
-    <ul id="menu-links" class="flex f-column">
+    <ul id="menu-container" class="flex f-column">
         {% for link in g.nav_links %}
-        <li><a href="{{ link.href }}">{{link.text}}</a></li>
+        <li class="menu-links"><a href="{{ link.href }}">{{link.text}}</a></li>
         {% endfor %}
     </ul>
 </div>

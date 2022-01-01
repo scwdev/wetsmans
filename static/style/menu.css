@@ -3,6 +3,15 @@
     justify-content: center;
 }
 
-ul#menu-links {
-    justify-content: space-evenly;   
+ul#menu-container {
+    justify-content: space-evenly;
+    transition-duration: 0.1s;
+}
+
+.menu-links {
+    transition-duration: 0.1s;
+}
+
+.menu-links:hover {
+    transform: scale(1.05, 1.05);
 }

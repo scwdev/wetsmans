@@ -1,8 +1,23 @@
 
-<nav>
-    <ul>
+<nav id="nav-container">
+
+    <script>
+        const showNav = () => {
+            const navList = document.getElementById('nav-list')
+            navList.classList.toggle('hidden')
+            navList.classList.toggle('revealed')
+        }
+
+        const hideNav = () => {
+        }
+
+
+    </script>
+
+    <button id="nav-button" onclick=showNav() >hamburger</button>
+    <ul id="nav-list" class="flex hidden">
     {% for link in g.nav_links %}
-        <li><a href="{{ link.href }}">{{link.text}}</a></li>
-    {% endfor %}
+        <li class="nav-links"><a href="{{ link.href }}">{{link.text}}</a></li>
+    {% endfor %} 
     </ul>
 </nav>

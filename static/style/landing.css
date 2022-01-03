@@ -6,12 +6,6 @@
     align-items: center;
 }
 
-#landing img.background {
-    position: absolute;
-    filter: blur(5px);
-    z-index: -1;
-}
-
 #landing a {
     width: 35vw;
     max-width: 50vh;

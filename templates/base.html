@@ -12,6 +12,7 @@
     {% endblock head%}
 </head>
 <body>
+    <img class="background" src="{{ url_for('static', filename='images/moon_and_venus.jpg')}}" alt="">
     {% if current_user.is_authenticated %}
     <p>{{ current_user.email }} is logged in</p>
     {% endif %}

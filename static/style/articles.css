@@ -1,0 +1,53 @@
+
+#articles-list {
+    margin-left: 50%;
+    transform: translateX(-50%);
+    height: 75vh;
+    overflow-y: scroll;
+}
+
+.article-li {
+    text-align: left;
+    margin: .5em;
+}
+
+
+#article-modal {
+    background: white;
+    border: 1px solid grey;
+    border-radius: 1em;
+    margin-top: 2em;
+    padding: 1em 2em;
+    overflow-y: scroll;
+    height: 70vh;
+}
+/* TODO list of links, "X" button. */
+#article-modal h2 {
+    text-align: center;
+    padding-top: 1em;
+}
+
+#article-modal p:first-of-type {    
+    text-align: center;
+    padding: 0px;
+    padding-bottom: 1em;
+}
+
+#article-modal figure, #article-modal img {
+    height: 10rem;
+    float: left;
+    /* margin: 0 auto; */
+    /* text-align: center; */
+}
+
+#article-modal figure {
+    text-align: right;
+    font-size: 0.5em;
+    padding: 2em;
+}
+
+#article-modal p {
+    font-size: 1em;
+    text-align: justify;
+    padding: 0.5em 0;
+}

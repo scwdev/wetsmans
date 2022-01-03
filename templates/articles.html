@@ -11,26 +11,36 @@
 {% block content %}
     <script>
         const closeModal = (event) => {
-            if (event.target.matches('.modal-button') == false) {
+            if (event.keyCode === 27) {
                 const article = document.getElementById('article-modal')
                 article.classList.add('hidden')
             }
+            console.log(event.target)
+            if (!event.target.closest('.modal')) {
+                if (!event.target.closest('.modal-button')) {
+                    const article = document.getElementById('article-modal')
+                    article.classList.add('hidden')
+                }
+            }
         }
-        window.addEventListener("click", closeModal, false);
+
+        window.addEventListener("click", closeModal);
+        window.addEventListener("keydown", closeModal)
     </script>
 
-    <ul>
+    <h1>{{ feed.feed.title }}</h1>
+    <ul id="articles-list" class="flex f-column">
     {% for article in feed.entries %}
         <script>
             const showArticle{{loop.index0}} = () => {
                 const article = document.getElementById('article-modal')
-                content = `{{feed.entries[loop.index0].summary|safe}}`
+                content = `<h2>{{feed.entries[loop.index0].title}}</h2>{{feed.entries[loop.index0].summary|safe}}`
                 article.innerHTML = content
                 article.classList.remove('hidden')
             }
         </script>
-        <li>
-            <button class='modal-button' onclick=showArticle{{loop.index0}}() >{{article.title}}</button>
+        <li class="article-li">
+            <button class='modal-button' onclick=showArticle{{loop.index0}}() ><h3>{{article.title}}</h3></button>
             {# <a href="{{article.link}}" target="_blank">{{article.title}}</a> #}
             <h6>{{article.published}}</h6>
         </li>

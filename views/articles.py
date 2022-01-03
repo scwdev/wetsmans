@@ -11,6 +11,6 @@ load_dotenv()
 @articles_bp.route('/', methods=['GET'])
 def index(dr_name:str):
     article_feed = feedparser.parse('https://medium.com/feed/@addictiondocMD')
-    pprint(article_feed.entries[0])
-    
+    # print(article_feed.feed.title)
+    # ['bozo', 'entries', 'feed', 'headers', 'href', 'status', 'encoding', 'version', 'namespaces']
     return render_template('articles.html', feed=article_feed)

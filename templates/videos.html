@@ -21,14 +21,15 @@
     window.addEventListener("click", closeModal, false);
 </script>
 
-<h1>{{feed.feed.author}}</h1>
-<h3><a href="{{feed.feed.href}}">YouTube Channel</a></h3>
+<h1>{{feed.feed.author}} <a id="youtube-favicon" href="{{feed.feed.href}}"" target="_blank" ><i class="fab fa-youtube"></i></a></h1>
 
-<ul id='ul'>
+<ul id='video-list-container' class="flex f-column">
     {% for video in feed.entries %}
-    <li>
-        <img src="{{video.media_thumbnail[0].url}}" alt="thumbnail">       
-        <button class='modal-button' onclick=showIFrame(`{{ video.yt_videoid }}`) >{{video.title}}</button>
+    <li class='video-items'>
+        <button class='video-buttons modal-button flex f-column' onclick=showIFrame(`{{ video.yt_videoid }}`) >
+            <h3>{{video.title}}</h3>
+            <img class='video-thumbnails modal-button' src="{{video.media_thumbnail[0].url}}" alt="thumbnail">
+        </button>
     </li>
     {% endfor %}
 </ul>

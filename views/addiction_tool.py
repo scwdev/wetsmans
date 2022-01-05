@@ -1,40 +1,88 @@
 from flask import Blueprint, render_template
 from dotenv import load_dotenv
 
-addiction_tool_bp = Blueprint('addiction_tool', __name__)
+import pandas as pd
+from pprint import pprint as pp
 
-load_dotenv()
+# addiction_tool_bp = Blueprint('addiction_tool', __name__)
 
-@addiction_tool_bp.route('/addiction_tool', methods=['GET'])
-def form(dr_name):
-    return render_template('addiction_tool.html')
+# load_dotenv()
 
-
-
-
-# import pandas as pd
-# import time
+# @addiction_tool_bp.route('/addiction_tool', methods=['GET'])
+# def form(dr_name):
+#     return render_template('addiction_tool.html')
 
 
-# def Get_Index(df, col, value):
-#     i = df.index[df[col] == value].tolist()
+# # get the snps
+snp_file = '../miscfiles/GenEd_AE_SNPlist.csv'
+snp_list = pd.read_csv(snp_file)
+
+# # get starts and stops
+gene_positions_dataframe = pd.read_csv('../miscfiles/AE_Gene_Positions.csv',
+                                       header=0,
+                                       dtype={'Gene':str, 'Chrom':str, 'GRCh37_start':int, 'GRCh37_end':int}
+)
+# gene_positions_dataframe = gene_positions_dataframe.rename(columns={'Unnamed: 0': 'Gene'})
+gene_list = gene_positions_dataframe['Gene'].tolist()
+print(f'The GenEd Addiction Education Report cointains {len(gene_list)} genes...')
+
+
+# get external data and return a dataframe
+print('I am loading your Ancestry file...')
+file = '../miscfiles/MickeyMouse_rawdata.txt'
+header_row = 18 ## TODO dynamically determine header etc
+dataframe = pd.read_csv(file,
+                        header=header_row,
+                        sep='\t',
+                        dtype={'rsid':str, 'chromosome':str, 'position':int, 'allele1':str, 'allele2':str})
+print(f'Your file has {dataframe.shape[0]} data points.')
+
+
+# determine gender
+print('I am determinine your gender...')
+gender_dataframe = dataframe.loc[dataframe['chromosome'].isin(['23','X'])].reset_index()
+# pp(gender_dataframe)
+# gender = 'female'
+for i in range(0, 1000, 1):
+    #TODO merge allele1 and allele2 into "genotype"
+    gt = gender_dataframe.loc[i, 'allele1'+'allele2']
+    pp(gt)
+#     if len(gt) > 1:
+#         pass
+#     else:
+#         gender = 'male'
+#         break
+# print(f'You are genetically {gender}.')
+
+
+
+
+#########################TODO
+
+# def Get_Index(dataframe, col, value):
+#     i = dataframe.index[dataframe[col] == value].tolist()
 #     if len(i) > 0:
 #         index = i[0]
 #         return index
 #     else:
 #         return None
 
-# def findkeys(node, kv):
+# def findkeys(node, key_value):
 #     if isinstance(node, list):
 #         for i in node:
-#             for x in findkeys(i, kv):
+#             for x in findkeys(i, key_value):
 #                 yield x
 #     elif isinstance(node, dict):
-#         if kv in node:
-#             yield node[kv]
+#         if key_value in node:
+#             yield node[key_value]
 #         for j in node.values():
-#             for x in findkeys(j, kv):
+#             for x in findkeys(j, key_value):
 #                 yield x
+
+#########################TODO
+
+
+
 
 
 # # we need a precalculated way to take someone's 23andme or ancestry
@@ -49,66 +97,25 @@ def form(dr_name):
 # # This script doesn't do this in as modular a way as I'd like but it
 # # has some modular functions in tit that can be used,
 
-# time0 = time.time()
-
-# # get the snps
-# snp_file = 'GenEd_AE_SNPlist.csv'
-# snp_list = pd.read_csv(snp_file)
-
-# # get starts and stops
-# gene_df = pd.read_csv('AE_Gene_Positions.csv')
-# gene_df = gene_df.rename(columns={'Unnamed: 0': 'Gene'})
-# gene_df['GRCh37_start'] = gene_df['GRCh37_start'].astype(int)
-# gene_df['GRCh37_end'] = gene_df['GRCh37_end'].astype(int)
-# gene_df['Chrom'] = gene_df['Chrom'].astype(str)
-# gene_list = gene_df['Gene'].tolist()
-# print(f'The GenEd Addiction Education Report cointains {len(gene_list)} genes...')
 
 
-# # get external data and return a df
-# print('I am loading your 23andme file...')
-# # file = 'MickeyMouseData.txt'
 
-# name = file.strip('.txt')
-# file = 'Genome_John_Silver.txt'
-# # file = 'Genome_Chicken_Little.txt'
-# # file = 'Genome_Bugs_Bunny.txt'
-# # file = 'DonaldDuck.txt'
 
-# df = pd.read_csv(file, sep='\t', dtype=str)
-# df['position'] = df['position'].astype(int)
-# df['chromosome'] = df['chromosome'].astype(str)
-# # print('original',df)
-# print(f'Your file has {df.shape[0]} data points.')
-
-# # determine gender
-# print('I am determinine your gender...')
-# gender_df = df[df['chromosome'] == 'X']
-# gender_df.reset_index(inplace=True, drop=True)
-# gender = 'female'
-# for i in range(0, 1000, 1):
-#     gt = gender_df.loc[i, 'genotype']
-#     if len(gt) > 1:
-#         pass
-#     else:
-#         gender = 'male'
-#         break
-# print(f'You are genetically {gender}.')
 
 # # filter on panel
 # print('I am filtering out all the data that is outside the AE panel...')
 # panel = pd.DataFrame()
 # for gene in gene_list:
 #     # print(gene)
-#     temp = gene_df[gene_df['Gene'] == gene]
+#     temp = gene_dataframe[gene_dataframe['Gene'] == gene]
 #     temp.reset_index(inplace=True, drop=True)
 #     chrom = temp.loc[0, 'Chrom']
 #     start = temp.loc[0, 'GRCh37_start']
 #     end = temp.loc[0, 'GRCh37_end']
-#     temp_df = df[df['chromosome'] == chrom]
-#     temp_df = temp_df[temp_df['position'] >= start]
-#     temp_df = temp_df[temp_df['position'] <= end]
-#     panel = panel.append(temp_df)
+#     temp_dataframe = dataframe[dataframe['chromosome'] == chrom]
+#     temp_dataframe = temp_dataframe[temp_dataframe['position'] >= start]
+#     temp_dataframe = temp_dataframe[temp_dataframe['position'] <= end]
+#     panel = panel.append(temp_dataframe)
 #     # print()
 # panel.reset_index(inplace=True, drop=True)
 
@@ -126,16 +133,16 @@ def form(dr_name):
 # print('23andme uses some non-standard names for some of their data called inumbers.')
 # print('I am finding standard identifiers for all of the inumbers I can...')
 # conversion_file = 'rsid_to_inumber.csv'
-# con_df = pd.read_csv(conversion_file, dtype=str)
-# con_df = con_df[con_df['ID'].str.contains('rs')]
-# con_df = con_df[con_df['23andme'].str.contains('i')]
-# con_df = con_df.drop_duplicates('23andme')
+# con_dataframe = pd.read_csv(conversion_file, dtype=str)
+# con_dataframe = con_dataframe[con_dataframe['ID'].str.contains('rs')]
+# con_dataframe = con_dataframe[con_dataframe['23andme'].str.contains('i')]
+# con_dataframe = con_dataframe.drop_duplicates('23andme')
 
 # with_rsid = panel[panel['# rsid'].str.contains('rs')]
 # with_i = panel[panel['# rsid'].str.contains('i')]
-# iss = con_df['23andme'].tolist()
+# iss = con_dataframe['23andme'].tolist()
 # with_i = with_i[with_i['# rsid'].isin(iss)]
-# with_i['# rsid'] = with_i['# rsid'].map(con_df.set_index('23andme')['ID'])
+# with_i['# rsid'] = with_i['# rsid'].map(con_dataframe.set_index('23andme')['ID'])
 
 # # filter out inumbers
 # print('I am filtering out the inumbers that I coud not replace...')
@@ -162,14 +169,14 @@ def form(dr_name):
 
 # # add referece data
 # print('I am getting reference data for these positions...')
-# ref_df = pd.read_csv('AE_23andMe_References.csv')
-# ref_df['location'] = ref_df['chromosome']+':'+ref_df['position'].astype(str)
-# ref_df.drop(['# rsid', 'chromosome', 'position'], axis=1, inplace=True)
-# ref_df.set_index('location', inplace=True, drop=True)
+# ref_dataframe = pd.read_csv('AE_23andMe_References.csv')
+# ref_dataframe['location'] = ref_dataframe['chromosome']+':'+ref_dataframe['position'].astype(str)
+# ref_dataframe.drop(['# rsid', 'chromosome', 'position'], axis=1, inplace=True)
+# ref_dataframe.set_index('location', inplace=True, drop=True)
 
 # print('I am comparing your data to the genomic reference build...')
 # panel['location'] = panel['chromosome']+':'+panel['position']
-# panel = pd.merge(panel, ref_df, how='left', on='location')
+# panel = pd.merge(panel, ref_dataframe, how='left', on='location')
 # panel['ref'] = panel['reference']
 # panel['reference'] = panel.reference*panel.genotype.str.len()
 # panel = panel[panel['genotype'] != panel['reference']]
@@ -219,7 +226,7 @@ def form(dr_name):
 #         alt = gt[0]
 #     panel.loc[idx, 'alt'] = alt
 
-# # turn df into vcf
+# # turn dataframe into vcf
 # print('Writing your VeP input file...')
 # with open(f'{name}_23andme.vcf', 'w') as f:
 #     f.write('##fileformat=VCFv4.2\n')
@@ -261,34 +268,34 @@ def form(dr_name):
 
 # def VEP_VCF_To_CSV(vcf, output_file):
 #     header = Get_Header(vcf)
-#     df = pd.read_csv(vcf, sep='\t', header=header)
-#     df = df[df['CANONICAL'] == 'YES']
-#     # df = df[df['Consequence']!='downstream_gene_variant']
-#     # df = df[df['Consequence']!='upstream_gene_variant']
-#     df['SIFT_score'] = df['SIFT'].str.extract('.*\((.*)\).*')
-#     df['PolyPhen_score'] = df['PolyPhen'].str.extract('.*\((.*)\).*')
-#     df = df[df['SYMBOL'].isin(gene_list)]
-#     df.to_csv('MickeyMouseData_VEP.csv', index=False)
+#     dataframe = pd.read_csv(vcf, sep='\t', header=header)
+#     dataframe = dataframe[dataframe['CANONICAL'] == 'YES']
+#     # dataframe = dataframe[dataframe['Consequence']!='downstream_gene_variant']
+#     # dataframe = dataframe[dataframe['Consequence']!='upstream_gene_variant']
+#     dataframe['SIFT_score'] = dataframe['SIFT'].str.extract('.*\((.*)\).*')
+#     dataframe['PolyPhen_score'] = dataframe['PolyPhen'].str.extract('.*\((.*)\).*')
+#     dataframe = dataframe[dataframe['SYMBOL'].isin(gene_list)]
+#     dataframe.to_csv('MickeyMouseData_VEP.csv', index=False)
 
 
 # file = 'vcf_vep_output.txt'
 # VEP_VCF_To_CSV(file, 'MickeyMouseData_VEP.csv')
-# vep_df = pd.read_csv('MickeyMouseData_VEP.csv', dtype=str)
-# vep_df.drop_duplicates(['#Uploaded_variation', 'Consequence'], inplace=True)
-# print(f'We have information on {vep_df.shape[0]} variants to tell you about.')
+# vep_dataframe = pd.read_csv('MickeyMouseData_VEP.csv', dtype=str)
+# vep_dataframe.drop_duplicates(['#Uploaded_variation', 'Consequence'], inplace=True)
+# print(f'We have information on {vep_dataframe.shape[0]} variants to tell you about.')
 
-# vep_df.drop(['MANE_PLUS_CLINICAL', 'Feature_type', 'DISTANCE',
+# vep_dataframe.drop(['MANE_PLUS_CLINICAL', 'Feature_type', 'DISTANCE',
 #              'FLAGS', 'SYMBOL_SOURCE', 'HGNC_ID', 'CANONICAL',
 #              'MANE_SELECT', 'APPRIS', 'TSL', 'SWISSPROT', 'TREMBL',
 #              'UNIPARC', 'UNIPROT_ISOFORM', 'GENE_PHENO', 'SOMATIC',
 #              'PHENO', 'MOTIF_NAME', 'MOTIF_POS', 'HIGH_INF_POS',
 #              'MOTIF_SCORE_CHANGE', 'TRANSCRIPTION_FACTORS'],
 #             axis=1, inplace=True)
-# print(vep_df)
+# print(vep_dataframe)
 
-# for idx, row in vep_df.iterrows():
-#     print(vep_df.loc[idx, 'ENSP'],
-#           vep_df.loc[idx, 'INTRON'], vep_df.loc[idx, 'Consequence'])
-# print(vep_df.columns)
+# for idx, row in vep_dataframe.iterrows():
+#     print(vep_dataframe.loc[idx, 'ENSP'],
+#           vep_dataframe.loc[idx, 'INTRON'], vep_dataframe.loc[idx, 'Consequence'])
+# print(vep_dataframe.columns)
 # time1 = time.time()
 # print(time1-time0)

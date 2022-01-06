@@ -23,144 +23,67 @@ gene_positions_dataframe = pd.read_csv('../miscfiles/AE_Gene_Positions.csv',
                                        dtype={'Gene':str, 'Chrom':str, 'GRCh37_start':int, 'GRCh37_end':int}
 )
 # gene_positions_dataframe = gene_positions_dataframe.rename(columns={'Unnamed: 0': 'Gene'})
-gene_list = gene_positions_dataframe['Gene'].tolist()
-print(f'The GenEd Addiction Education Report cointains {len(gene_list)} genes...')
+# gene_list = gene_positions_dataframe['Gene'].tolist()
+# print(f'The GenEd Addiction Education Report cointains {len(gene_list)} genes...')
 
 
 # get external data and return a dataframe
 print('I am loading your Ancestry file...')
 file = '../miscfiles/MickeyMouse_rawdata.txt'
 header_row = 18 ## TODO dynamically determine header etc
-dataframe = pd.read_csv(file,
+user_dataframe = pd.read_csv(file,
                         header=header_row,
                         sep='\t',
-                        dtype={'rsid':str, 'chromosome':str, 'position':int, 'chromosome':str,'allele1':str, 'allele2':str})
-# print(f'Your file has {dataframe.shape[0]} data points.')
-pp(dataframe)
+                        dtype={'rsid':str, 'chromosome':str, 'position':int,'allele1':str, 'allele2':str})
+user_dataframe['genotype'] = user_dataframe['allele1'].str.cat(user_dataframe['allele2'])
+print(f'Your file has {user_dataframe.shape[0]} data points.')
 
 # determine gender
-# print('I am determinine your gender...')
-# gender_dataframe = dataframe.loc[dataframe['chromosome'].isin(['23','X'])].reset_index()
-# # pp(gender_dataframe)
-# # gender = 'female'
-# for i in range(0, 1000, 1):
-#     #TODO merge allele1 and allele2 into "genotype"
-#     gt = gender_dataframe.loc[i, 'allele1'+'allele2']
-#     pp(gt)
-#     if len(gt) > 1:
-#         pass
-#     else:
-#         gender = 'male'
-#         break
-# print(f'You are genetically {gender}.')
+print('I am determinine your gender...')
+gender_dataframe = user_dataframe.loc[user_dataframe['chromosome'].isin(['23','X'])].reset_index()
+gender = 'female'
+for i in range(0, 1000, 1):
+    gt = gender_dataframe.loc[i, 'genotype']
+    if len(gt) > 1:
+        pass
+    else:
+        gender = 'male'
+        break
+print(f'You are genetically {gender}.')
 
 
-# # filter on panel
-# print('I am filtering out all the data that is outside the AE panel...')
-# panel = pd.DataFrame()
-# for gene in gene_list:
-#     # print(gene)
-#     temp = gene_dataframe[gene_dataframe['Gene'] == gene]
-#     temp.reset_index(inplace=True, drop=True)
-#     chrom = temp.loc[0, 'Chrom']
-#     start = temp.loc[0, 'GRCh37_start']
-#     end = temp.loc[0, 'GRCh37_end']
-#     temp_dataframe = dataframe[dataframe['chromosome'] == chrom]
-#     temp_dataframe = temp_dataframe[temp_dataframe['position'] >= start]
-#     temp_dataframe = temp_dataframe[temp_dataframe['position'] <= end]
-#     panel = panel.append(temp_dataframe)
-#     # print()
-# panel.reset_index(inplace=True, drop=True)
-
-# panel.position = panel.position.astype(str)
-# print(f'You have {panel.shape[0]} data points from 23andme in the AE panel...')
-
-
-
-
-
-#########################TODO
-
-# def Get_Index(dataframe, col, value):
-#     i = dataframe.index[dataframe[col] == value].tolist()
-#     if len(i) > 0:
-#         index = i[0]
-#         return index
-#     else:
-#         return None
-
-# def findkeys(node, key_value):
-#     if isinstance(node, list):
-#         for i in node:
-#             for x in findkeys(i, key_value):
-#                 yield x
-#     elif isinstance(node, dict):
-#         if key_value in node:
-#             yield node[key_value]
-#         for j in node.values():
-#             for x in findkeys(j, key_value):
-#                 yield x
-
-# # we need a precalculated way to take someone's 23andme or ancestry
-# # data and return a standardized GenEd.csv
-# # It needs to determine:
-#     # company of origin
-#     # Version
-#     # correct inumbers
-#     # correct indel references
-#     # remake csv in vcf form for vep
-
-# # This script doesn't do this in as modular a way as I'd like but it
-# # has some modular functions in tit that can be used,
-
-
-
-#########################TODO
-
-
+# filter on panel
+print('I am filtering out all the data that is outside the AE panel...')
+panel = pd.DataFrame()
+# pp(gene_positions_dataframe)
+for row in gene_positions_dataframe.itertuples():
+    temp_dataframe = user_dataframe[user_dataframe['chromosome'] == row.Chrom]
+    temp_dataframe = temp_dataframe[temp_dataframe['position'] >= row.GRCh37_start]
+    temp_dataframe = temp_dataframe[temp_dataframe['position'] <= row.GRCh37_end]
+        
+    panel = panel.append(temp_dataframe)
+panel.reset_index(inplace=True, drop=True)
+panel.position = panel.position.astype(str)
+print(f'You have {panel.shape[0]} data points from 23andme in the AE panel...')
 
 # # remove no calls
-# print('I am removing those positions where 23andme did not find any data...')
-# panel = panel[~panel['genotype'].str.contains('-')]
+print('I am removing those positions where 23andme did not find any data...')
+panel = panel[~panel['genotype'].str.contains('-')]
+print(f'There are {panel.shape[0]} data points at which 23andme found information.')
 
-# print(f'There are {panel.shape[0]} data points at which 23andme found information.')
 
-# # replace inumbers with rsIDs where possible
-# print('23andme uses some non-standard names for some of their data called inumbers.')
-# print('I am finding standard identifiers for all of the inumbers I can...')
-# conversion_file = 'rsid_to_inumber.csv'
-# con_dataframe = pd.read_csv(conversion_file, dtype=str)
-# con_dataframe = con_dataframe[con_dataframe['ID'].str.contains('rs')]
-# con_dataframe = con_dataframe[con_dataframe['23andme'].str.contains('i')]
-# con_dataframe = con_dataframe.drop_duplicates('23andme')
+# handle indels
+indels = panel[panel['genotype'].str.contains('I|D')]
+print(indels)
 
-# with_rsid = panel[panel['# rsid'].str.contains('rs')]
-# with_i = panel[panel['# rsid'].str.contains('i')]
-# iss = con_dataframe['23andme'].tolist()
-# with_i = with_i[with_i['# rsid'].isin(iss)]
-# with_i['# rsid'] = with_i['# rsid'].map(con_dataframe.set_index('23andme')['ID'])
+indel_refs = pd.read_csv('AE_23andme_Indels.csv')
+print(indel_refs)
 
-# # filter out inumbers
-# print('I am filtering out the inumbers that I coud not replace...')
-# with_i = with_i[with_i['# rsid'].str.contains('rs')]
-# with_i = with_i.drop_duplicates('# rsid')
-
-# # recombine all with rsid
-# panel = with_rsid.append(with_i)
-# print(f'There are {panel.shape[0]} data points remaining.')
-
-# # handle indels
-# indels = panel[panel['genotype'].str.contains('I|D')]
-# print(indels)
-
-# indel_refs = pd.read_csv('AE_23andme_Indels.csv')
-# print(indel_refs)
-
-# # delete the known wonky ones
-# delete = indel_refs[indel_refs['alt'] == 'Delete']['# rsid'].tolist()
-# panel = panel[~panel['# rsid'].isin(delete)]
-# print(
-#     f'After deleting indels that were not precisely defined we have {panel.shape[0]} data points left.')
+# delete the known wonky ones
+delete = indel_refs[indel_refs['alt'] == 'Delete']['# rsid'].tolist()
+panel = panel[~panel['# rsid'].isin(delete)]
+print(
+    f'After deleting indels that were not precisely defined we have {panel.shape[0]} data points left.')
 
 
 # # add referece data
@@ -295,3 +218,66 @@ pp(dataframe)
 # print(vep_dataframe.columns)
 # time1 = time.time()
 # print(time1-time0)
+
+
+#########################TODO
+
+# def Get_Index(dataframe, col, value):
+#     i = dataframe.index[dataframe[col] == value].tolist()
+#     if len(i) > 0:
+#         index = i[0]
+#         return index
+#     else:
+#         return None
+
+# def findkeys(node, key_value):
+#     if isinstance(node, list):
+#         for i in node:
+#             for x in findkeys(i, key_value):
+#                 yield x
+#     elif isinstance(node, dict):
+#         if key_value in node:
+#             yield node[key_value]
+#         for j in node.values():
+#             for x in findkeys(j, key_value):
+#                 yield x
+
+# # we need a precalculated way to take someone's 23andme or ancestry
+# # data and return a standardized GenEd.csv
+# # It needs to determine:
+#     # company of origin
+#     # Version
+#     # correct inumbers
+#     # correct indel references
+#     # remake csv in vcf form for vep
+
+# # This script doesn't do this in as modular a way as I'd like but it
+# # has some modular functions in tit that can be used,
+
+
+
+#########################TODO
+
+# # replace inumbers with rsIDs where possible
+# print('23andme uses some non-standard names for some of their data called inumbers.')
+# print('I am finding standard identifiers for all of the inumbers I can...')
+# conversion_file = 'rsid_to_inumber.csv'
+# con_dataframe = pd.read_csv(conversion_file, dtype=str)
+# con_dataframe = con_dataframe[con_dataframe['ID'].str.contains('rs')]
+# con_dataframe = con_dataframe[con_dataframe['23andme'].str.contains('i')]
+# con_dataframe = con_dataframe.drop_duplicates('23andme')
+
+# with_rsid = panel[panel['# rsid'].str.contains('rs')]
+# with_i = panel[panel['# rsid'].str.contains('i')]
+# iss = con_dataframe['23andme'].tolist()
+# with_i = with_i[with_i['# rsid'].isin(iss)]
+# with_i['# rsid'] = with_i['# rsid'].map(con_dataframe.set_index('23andme')['ID'])
+
+# # filter out inumbers
+# print('I am filtering out the inumbers that I coud not replace...')
+# with_i = with_i[with_i['# rsid'].str.contains('rs')]
+# with_i = with_i.drop_duplicates('# rsid')
+
+# # recombine all with rsid
+# panel = with_rsid.append(with_i)
+# print(f'There are {panel.shape[0]} data points remaining.')

@@ -34,25 +34,47 @@ header_row = 18 ## TODO dynamically determine header etc
 dataframe = pd.read_csv(file,
                         header=header_row,
                         sep='\t',
-                        dtype={'rsid':str, 'chromosome':str, 'position':int, 'allele1':str, 'allele2':str})
-print(f'Your file has {dataframe.shape[0]} data points.')
-
+                        dtype={'rsid':str, 'chromosome':str, 'position':int, 'chromosome':str,'allele1':str, 'allele2':str})
+# print(f'Your file has {dataframe.shape[0]} data points.')
+pp(dataframe)
 
 # determine gender
-print('I am determinine your gender...')
-gender_dataframe = dataframe.loc[dataframe['chromosome'].isin(['23','X'])].reset_index()
-# pp(gender_dataframe)
-# gender = 'female'
-for i in range(0, 1000, 1):
-    #TODO merge allele1 and allele2 into "genotype"
-    gt = gender_dataframe.loc[i, 'allele1'+'allele2']
-    pp(gt)
+# print('I am determinine your gender...')
+# gender_dataframe = dataframe.loc[dataframe['chromosome'].isin(['23','X'])].reset_index()
+# # pp(gender_dataframe)
+# # gender = 'female'
+# for i in range(0, 1000, 1):
+#     #TODO merge allele1 and allele2 into "genotype"
+#     gt = gender_dataframe.loc[i, 'allele1'+'allele2']
+#     pp(gt)
 #     if len(gt) > 1:
 #         pass
 #     else:
 #         gender = 'male'
 #         break
 # print(f'You are genetically {gender}.')
+
+
+# # filter on panel
+# print('I am filtering out all the data that is outside the AE panel...')
+# panel = pd.DataFrame()
+# for gene in gene_list:
+#     # print(gene)
+#     temp = gene_dataframe[gene_dataframe['Gene'] == gene]
+#     temp.reset_index(inplace=True, drop=True)
+#     chrom = temp.loc[0, 'Chrom']
+#     start = temp.loc[0, 'GRCh37_start']
+#     end = temp.loc[0, 'GRCh37_end']
+#     temp_dataframe = dataframe[dataframe['chromosome'] == chrom]
+#     temp_dataframe = temp_dataframe[temp_dataframe['position'] >= start]
+#     temp_dataframe = temp_dataframe[temp_dataframe['position'] <= end]
+#     panel = panel.append(temp_dataframe)
+#     # print()
+# panel.reset_index(inplace=True, drop=True)
+
+# panel.position = panel.position.astype(str)
+# print(f'You have {panel.shape[0]} data points from 23andme in the AE panel...')
+
 
 
 
@@ -79,12 +101,6 @@ for i in range(0, 1000, 1):
 #             for x in findkeys(j, key_value):
 #                 yield x
 
-#########################TODO
-
-
-
-
-
 # # we need a precalculated way to take someone's 23andme or ancestry
 # # data and return a standardized GenEd.csv
 # # It needs to determine:
@@ -99,28 +115,8 @@ for i in range(0, 1000, 1):
 
 
 
+#########################TODO
 
-
-
-# # filter on panel
-# print('I am filtering out all the data that is outside the AE panel...')
-# panel = pd.DataFrame()
-# for gene in gene_list:
-#     # print(gene)
-#     temp = gene_dataframe[gene_dataframe['Gene'] == gene]
-#     temp.reset_index(inplace=True, drop=True)
-#     chrom = temp.loc[0, 'Chrom']
-#     start = temp.loc[0, 'GRCh37_start']
-#     end = temp.loc[0, 'GRCh37_end']
-#     temp_dataframe = dataframe[dataframe['chromosome'] == chrom]
-#     temp_dataframe = temp_dataframe[temp_dataframe['position'] >= start]
-#     temp_dataframe = temp_dataframe[temp_dataframe['position'] <= end]
-#     panel = panel.append(temp_dataframe)
-#     # print()
-# panel.reset_index(inplace=True, drop=True)
-
-# panel.position = panel.position.astype(str)
-# print(f'You have {panel.shape[0]} data points from 23andme in the AE panel...')
 
 
 # # remove no calls

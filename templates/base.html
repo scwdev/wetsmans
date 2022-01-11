@@ -11,7 +11,7 @@
     <title>{% block title %}{% endblock title%}</title>
     {% endblock head%}
 </head>
-<body>
+<body class='background-img'>
     <img class="background" src="{{ url_for('static', filename='images/moon_and_venus.jpg')}}" alt="">
     {% if current_user.is_authenticated %}
     <p>{{ current_user.email }} is logged in</p>

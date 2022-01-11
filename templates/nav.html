@@ -1,7 +1,7 @@
 
 <nav id="nav-container">
 
-    <script>
+    {# <script>
         const showNav = () => {
             const navList = document.getElementById('nav-list')
             navList.classList.toggle('hidden')
@@ -14,8 +14,8 @@
 
     </script>
 
-    <button id="nav-button" onclick=showNav() >hamburger</button>
-    <ul id="nav-list" class="flex hidden">
+    <button id="nav-button" onclick=showNav() >hamburger</button> #}
+    <ul id="nav-list" class="flex">
     {% for link in g.nav_links %}
         <li class="nav-links"><a href="{{ link.href }}">{{link.text}}</a></li>
     {% endfor %} 

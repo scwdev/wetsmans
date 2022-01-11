@@ -1,0 +1,13 @@
+#contact-form {
+    align-items: center;
+    padding: 1em;
+}
+
+#contact-form > *{
+    padding: .5em;
+}
+
+#contact-message-input {
+    min-width: 30vw;
+    min-height: 10em;
+}

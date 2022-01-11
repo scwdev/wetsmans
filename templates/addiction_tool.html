@@ -1,3 +1,31 @@
 {% extends 'base.html' %}
 
 {% include 'nav.html' %}
+
+{% block title %}Addiction Education{% endblock %}
+
+{% block content %}
+
+<script>
+    const displayResults = (event) => {
+        const results = document.getElementById('results-container')
+        results.classList.toggle('hidden')
+    }
+</script>
+
+<h1>Addiction Education Tool</h1>
+<div id="upload-form-container">
+    <p>Description of what the tool does and how it does it.</p>
+    <form action="">
+        <label for="csv-upload"></label>
+        <input type="file" name="csv-upload" id="">
+    </form>
+    <button onclick=displayResults() id="temporary-button">Submit</button>
+</div>
+<div id='results-container' class="hidden">
+    <h2>Results</h2>
+    <p>Brief description of results</p>
+    <button>Download pdf</button>
+</div>
+
+{% endblock content %}

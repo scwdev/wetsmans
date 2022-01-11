@@ -40,14 +40,15 @@ from views.addiction_tool import addiction_tool_bp
 def landing():
     return render_template("landing.html")
 
+app.register_blueprint(user_bp)
+
 doctor_bp.register_blueprint(about_bp)
-doctor_bp.register_blueprint(user_bp)
 doctor_bp.register_blueprint(articles_bp)
 doctor_bp.register_blueprint(video_bp)
 doctor_bp.register_blueprint(addiction_tool_bp)
 doctor_bp.register_blueprint(contact_bp)
 
-    
+
 app.register_blueprint(doctor_bp)
 
 

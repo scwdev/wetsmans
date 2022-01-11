@@ -1,0 +1,14 @@
+#upload-form-container {
+    text-align: center;
+    padding: 1em;
+}
+
+#upload-form-container > * {
+    padding: .5em;
+}
+
+
+#results-container {
+    text-align: center;
+    padding: 2em;
+}

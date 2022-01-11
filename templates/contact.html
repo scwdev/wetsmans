@@ -1,3 +1,24 @@
 {% extends 'base.html' %}
 
 {% include 'nav.html' %}
+
+{% block title %}Contact Me{% endblock %}
+
+{% block content %}
+
+<h1>Contact Me</h1>
+
+<form id="contact-form" class="flex f-column" action="">
+    <label for="name">Name: 
+        <input id="contact-name-input" type="text" name="name" placeholder="Your Name">
+    </label>
+    <label for="email">Email: 
+        <input id="contact-email-input" type="email" name="email" placeholder="you@domain.com">
+    </label>
+    <label for="message">
+        <textarea id="contact-message-input" name="message" placeholder="Type your message here..."></textarea>
+    </label>
+    <input type="submit" value="Submit">
+</form>
+
+{% endblock %}

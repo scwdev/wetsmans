@@ -15,7 +15,6 @@ load_dotenv()
 def load_user(user_id):
     return User.query.get(user_id)
 
-
 @user_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == "GET":
